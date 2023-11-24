@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Data</title>
+</head>
+<body>
+    <h1>Error Data</h1>
+    <label for="error-select">Select an error:</label>
+    <select id="error-select" onchange="getErrorData()">
+        {% for error in errors_list %}
+            <option value="{{ error }}">{{ error }}</option>
+        {% endfor %}
+    </select>
+    <div id="error-data">
+    </div>
+    <script>
+        function getErrorData() {
+            var selectedError = document.getElementById("error-select").value;
+            fetch(`/get_error_data/${selectedError}`)
+                .then(response => response.json())
+                .then(data => {
+                    var errorDataDiv = document.getElementById("error-data");
+                    errorDataDiv.innerHTML = `<h2>${selectedError}</h2>`;
+                    for (var key in data) {
+                        errorDataDiv.innerHTML += `<p><strong>${key}:</strong> ${data[key]}</p>`;
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
